@@ -1,25 +1,26 @@
 const fs = require("fs")
-const PORT = process.env.PORT || 3001;
-function readToFile(fileName) {
-    console.log(`readToFile`);
-    let bufferData = fs.readFileSync(fileName);
-    return JSON.parse(bufferData)
-}
+const PORT = process.env.PORT || 3012;
+// function readToFile(fileName) {
+//     console.log(`readToFile`);
+//     let bufferData = fs.readFileSync(fileName);
+//     return JSON.parse(bufferData)
+// }
 // RETRIEVING THE NOTES of the file. this function's purpose is to read the file of db.json file. let bufferData is called a raw data which redefines into the fs.readFile Sync. Then it will return the JSON.parse (parse means converting regular data into the JSON data format of code.)
+const api = require (`./API_routes`)
 
-let notesFromFile = readToFile('.json files/db copy.json');
+// let notesFromFile = readToFile('.json files/db copy.json');
 //  reading the information from the db.json file and STORING it into the notes file variable (let notesFromFile)
-console.log(notesFromFile);
-notesFromFile.push({ title: 'new Test Title', text: 'new Test text' })
+// console.log(notesFromFile);
+// notesFromFile.push({ title: 'new Test Title', text: 'new Test text' })
 // pushing the json object information inside an array 
 
-console.log(notesFromFile);
+// console.log(notesFromFile);
 
 
-function writeToFile(fileName, data) {
-    console.log(`writeToFile`);
-    return fs.writeFileSync(fileName, data)
-}
+// function writeToFile(fileName, data) {
+//   console.log(`writeToFile`);
+//   return fs.writeFileSync(fileName, data)
+// }
 // writing the data from the json file.
 
 // writeToFile('db copy.json', JSON.stringify(notesFromFile));
@@ -29,6 +30,13 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// "/notes"
+app.use('/api', api);
+
+app.use(express.static('public'));
+
 
 app.get('/notes', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/notes.html'))
