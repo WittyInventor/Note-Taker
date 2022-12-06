@@ -6,6 +6,8 @@ let notes = require(`../json_files/db.json`)
 // "/notes"
 const fs = require("fs")
 
+const { v4: uuidv4 } = require('uuid');
+
 
 router.get(`/notes`, (req, res) => {
     res.json(notes)
@@ -14,16 +16,17 @@ router.get(`/notes`, (req, res) => {
 )
 
 router.post('/notes', (req, res) => {
+    console.log("hello")
     if (req.body) {
         const {title, text} = req.body;
         notes.push({
             title:title,
             text:text,
-            id:notes.length+1
+            id: uuidv4()
         })
-        writeToFile('/Users/annemariesheridan/Desktop/bootcamp/challenges/Note-Taker/json_files/db.json', JSON.stringify(notes))
+        writeToFile('../json_files/db.json', JSON.stringify(notes))
 
-        res.end(JSON.stringify(notes))
+        res.json(notes)
     }
 })
 
@@ -36,7 +39,7 @@ router.delete('/notes/:id', (req, res) => {
         const deletedNotes = notes.find(note => note.id ==id)
         if (deletedNotes) {
             notes = notes.filter(note=>note.id!=id);
-            writeToFile('/Users/annemariesheridan/Desktop/bootcamp/challenges/Note-Taker/json_files/db.json', JSON.stringify(notes))
+            writeToFile('../json_files/db.json', JSON.stringify(notes))
 
             res.end(JSON.stringify(notes))
         } else {
@@ -49,7 +52,7 @@ router.delete('/notes/:id', (req, res) => {
         
 function writeToFile(fileName, data) {
   console.log(`writeToFile`);
-  fs.writeFileSync(fileName, data)
+  fs.writeFileSync("json_files/db.json", data)
 }
 
 
